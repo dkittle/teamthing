@@ -1,6 +1,7 @@
 package game
 
 import org.scalatest.{Matchers, FlatSpec}
+import game.Position._
 
 class ScheduleSpec extends FlatSpec with Matchers {
 
@@ -19,5 +20,32 @@ class ScheduleSpec extends FlatSpec with Matchers {
     series.draws(1).name should be ("B")
   }
 
+  "A team" should "not be found" in {
+    val c = Team(Map(Lead -> Player()), "C")
+    val d = Team(Map(Lead -> Player(), Second -> Player()), "D")
+    val t3 = List(c,d)
+    val sched = new Schedule()
+    val team = sched.findAvailableTeam(t3, List(Lead))
+    team should be (None)
+  }
+
+  "Team C" should "be found" in {
+    val c = Team(Map(Lead -> Player()), "C")
+    val d = Team(Map(Lead -> Player(), Second -> Player()), "D")
+    val t3 = List(c,d)
+    val sched = new Schedule()
+    val team = sched.findAvailableTeam(t3, List(Second))
+    team should not be (None)
+    team.take(1).headOption.get should be (c)
+  }
+
+  "Team C or D" should "be found" in {
+    val c = Team(Map(Lead -> Player()), "C")
+    val d = Team(Map(Lead -> Player(), Second -> Player()), "D")
+    val t3 = List(c,d)
+    val sched = new Schedule()
+    val team = sched.findAvailableTeam(t3, List(Vice))
+    t3 should contain (team.take(1).headOption.get)
+  }
 
 }

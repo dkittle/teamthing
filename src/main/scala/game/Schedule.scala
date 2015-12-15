@@ -25,11 +25,11 @@ class Schedule {
   }
 
   def findAvailableTeam(teams: List[Team], positions: List[Position]): Option[Team] = {
+    findAvailableTeams(teams, positions).take(1).headOption
+  }
+
+  def findAvailableTeams(teams: List[Team], positions: List[Position]): List[Team] = {
     val r = Random.shuffle(teams)
-    val e = r.filter(t => positions.diff(t.players.keys.toList).size > 0)
-    e.take(1).size match {
-      case 0 => None
-      case _ => Some(e.head)
-    }
+    r.filter(t => positions.diff(t.players.keys.toList).size > 0)
   }
 }
