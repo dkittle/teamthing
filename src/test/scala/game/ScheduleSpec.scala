@@ -46,6 +46,8 @@ class ScheduleSpec extends FlatSpec with Matchers {
     val sched = new Schedule()
     val team = sched.findAvailableTeam(t3, List(Vice))
     t3 should contain (team.take(1).headOption.get)
+    val teams = sched.findAvailableTeams(t3, List(Vice))
+    t3.diff(teams).headOption should be (None)
   }
 
 }
